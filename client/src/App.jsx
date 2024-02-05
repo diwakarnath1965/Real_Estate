@@ -9,7 +9,7 @@ import Header from './components/Header.jsx'
 
 const App = () => {
   return (
-    <div>
+    <div className='font-inter'>
       <Header/>
       <Routes>
         <Route path='/' element={<Home/>}/>
