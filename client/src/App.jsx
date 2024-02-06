@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp.jsx'
 import Header from './components/Header.jsx'
 
 
+
 const App = () => {
   return (
     <div className='font-inter'>

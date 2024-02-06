@@ -6,7 +6,6 @@ import {
   signInSuccess,
   signInStart,
   signInFailure,
-  setLoading
 } from "../redux/user/userSlice";
 
 const SignIn = () => {
@@ -43,7 +42,7 @@ const SignIn = () => {
 
       if (!formData.email || !formData.password) {
         toast.error("Please fill in all fields");
-        dispatch(setLoading(false))
+        dispatch(signInFailure("Please fill in all fields"));
         return;
       }
 
@@ -56,14 +55,13 @@ const SignIn = () => {
 
       if (data.success === true) {
         dispatch(signInSuccess(data.user));
+
         toast.success(data.message);
         navigate("/");
       }
     } catch (error) {
       dispatch(signInFailure(error.message));
       toast.error(error);
-    } finally {
-      dispatch(loading(false));
     }
   };
 
