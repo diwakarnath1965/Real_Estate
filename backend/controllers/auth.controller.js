@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
   } catch (error) {
     return res.status(401).json({
         success:false,
-        message:"signup failed",
+        message:"Signup failed, Please try again!!",
     })
   }
 };
