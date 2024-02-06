@@ -34,7 +34,7 @@ const SignUp = () => {
 
       if(!formData.username || !formData.email || !formData.password) {
         setError("Please fill in all fields");
-        toast.error("Please fill in all fields");
+        toast.error(error);
         setLoading(false);
         return;
       }
@@ -43,7 +43,7 @@ const SignUp = () => {
 
       if (data.success === false) {
         setError(data.message);
-        toast.error(data.message);
+        toast.error(error);
       }
 
       if (data.success === true) {
@@ -53,7 +53,7 @@ const SignUp = () => {
       }
     } catch (error) {
       setError(error.message);
-      toast.error(error.message);
+      toast.error(error);
     } finally {
       setLoading(false);
     }

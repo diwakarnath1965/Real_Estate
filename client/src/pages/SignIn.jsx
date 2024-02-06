@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  signInSuccess,
+  signInStart,
+  signInFailure,
+  setLoading
+} from "../redux/user/userSlice";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const { error, loading } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -23,7 +32,7 @@ const SignIn = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    dispatch(signInStart());
 
     try {
       const res = await fetch(API_URL, {
@@ -32,30 +41,29 @@ const SignIn = () => {
         body: JSON.stringify(formData),
       });
 
-      if(!formData.email || !formData.password) {
-        setError("Please fill in all fields");
+      if (!formData.email || !formData.password) {
         toast.error("Please fill in all fields");
-        setLoading(false);
+        dispatch(setLoading(false))
         return;
       }
 
       const data = await res.json();
 
       if (data.success === false) {
-        setError(data.message);
-        toast.error(data.message);
+        dispatch(signInFailure(data.message));
+        toast.error(error);
       }
 
       if (data.success === true) {
-        setError(null);
+        dispatch(signInSuccess(data.user));
         toast.success(data.message);
         navigate("/");
       }
     } catch (error) {
-      setError(error.message);
-      toast.error(error.message);
+      dispatch(signInFailure(error.message));
+      toast.error(error);
     } finally {
-      setLoading(false);
+      dispatch(loading(false));
     }
   };
 
@@ -63,7 +71,6 @@ const SignIn = () => {
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
       <form onSubmit={submitHandler} className="flex flex-col gap-4">
-        
         <input
           type="email"
           placeholder="email@gmail.com"
