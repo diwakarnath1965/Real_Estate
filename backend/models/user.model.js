@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type:String,
-      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnI4YL0VfEhtQfhkN34eOFdOem2SPqDHnM-ksB880GbQDepQ4ojdDO6vyvFw&s"
+      default: "https://prototyprio.gumlet.io/wp-content/uploads/2021/06/avatar-150x150.png?w=256&q=75&format=webp&compress=true&dpr=2"
     },
   },
   { timestamps: true }
