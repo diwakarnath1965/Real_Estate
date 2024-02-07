@@ -29,9 +29,8 @@ const OAuth = () => {
       });
 
       const data = await response.json();
-      if (data.success === true) {
-        navigate("/");
-      }
+      
+      navigate("/");
 
       dispatch(signInSuccess(data));
     } catch (error) {
