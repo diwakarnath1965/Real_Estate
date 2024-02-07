@@ -73,3 +73,47 @@ export const signin = async (req, res) => {
     });
   }
 };
+
+export const google = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      user.password = undefined;
+      res.cookie("access_token", token, { httpOnly: true }).status(201).json({
+        success: true,
+        message: "signin successfull",
+        user,
+      });
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+      const newUser = await User.create({
+        username:
+          req.body.name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email: req.body.email,
+        password: hashedPassword,
+        avatar: req.body.photo,
+      });
+
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+
+      newUser.password = undefined;
+
+      res.cookie("access_token", token, { httpOnly: true }).status(201).json({
+        success: true,
+        message: "signin successfull",
+        newUser,
+      });
+    }
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Signin failed, Please try again!!",
+    });
+  }
+};
